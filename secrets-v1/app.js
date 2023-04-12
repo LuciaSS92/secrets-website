@@ -64,7 +64,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/auth/google/secrets",
-      // userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOne({ googleId: profile.id })
@@ -129,7 +129,7 @@ app.get("/login", function (req, res) {
 
 app.get("/secrets", function (req, res) {
   User.find({ "secret": { $ne: null } })
-    .then((foundUser) => res.render("secrets", { usersWithSecrets: foundUser }))
+    .then((foundUsers) => res.render("secrets", { usersWithSecrets: foundUsers }))
     .catch((err) => {
       console.log(err);
     });
@@ -193,7 +193,7 @@ app.post("/submit", function (req, res) {
     .then((foundUser) => {
       if (foundUser) {
         foundUser.secret = submittedSecret;
-        foundUser.save;
+        foundUser.save();
         console.log(foundUser.secret);
         res.redirect("/secrets");
       }
