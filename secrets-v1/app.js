@@ -102,20 +102,10 @@ app.get(
 app.get(
   "/auth/google/secrets",
   passport.authenticate("google", { failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
+  function (req, res) {    
     res.redirect("/secrets");
   }
 );
-
-// BETTER WAY
-// app
-//   .route("/auth/google")
-//   .get(
-//     passport.authenticate("google", {
-//       scope: ["profile"],
-//     })
-//   );
 
 //GET
 
@@ -134,6 +124,7 @@ app.get("/secrets", function (req, res) {
       console.log(err);
     });
 
+    //*If we want to control with authentication
   // if (req.isAuthenticated()) {
   //   res.render("secrets");
   // } else {
@@ -193,8 +184,7 @@ app.post("/submit", function (req, res) {
     .then((foundUser) => {
       if (foundUser) {
         foundUser.secret = submittedSecret;
-        foundUser.save();
-        console.log(foundUser.secret);
+        foundUser.save();      
         res.redirect("/secrets");
       }
     })
